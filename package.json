@@ -1,0 +1,14 @@
+{
+  "name": "sql-generator",
+  "version": "0.0.0",
+  "description": "Você passa um template de uma sql, um json com dados, e compila.",
+  "main": "sql-generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Armando Magalhães",
+  "license": "ISC",
+  "dependencies": {
+    "pattern-replace": "^0.1.2"
+  }
+}
