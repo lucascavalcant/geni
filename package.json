@@ -9,6 +9,7 @@
   "author": "Armando Magalhães",
   "license": "ISC",
   "dependencies": {
-    "pattern-replace": "^0.1.2"
+    "pattern-replace": "^0.1.2",
+    "sql-parser": "^0.5.0"
   }
 }
