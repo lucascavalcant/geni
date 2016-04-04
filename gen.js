@@ -27,7 +27,7 @@ class Gen {
       throw new Error ("options.template path is null.");
     }
 
-    this.data = options.data;
+    var data = options.data;
 
     if (typeof data == 'string') {
       data = require(data);
@@ -38,10 +38,6 @@ class Gen {
     }
 
     this.template = options.template;
-
-  }
-
-  getData() {
 
   }
 }
