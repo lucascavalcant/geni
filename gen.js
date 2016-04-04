@@ -1,6 +1,7 @@
+'use strict';
+
 var fs = require('fs');
-var Replacer = require('pattern-replace');
-var sqlParser = require('sql-parser');
+var PatternReplace = require('pattern-replace');
 
 var writeFile = function(resultFilePath, content) {
   fs.writeFile(resultFilePath, content, 'utf-8', function(err, data) {
@@ -12,46 +13,43 @@ var writeFile = function(resultFilePath, content) {
   });
 };
 
+class Gen {
+  generate(options) {
+    if (!options) {
+      throw new Error ("options parameter is null.");
+    }
+
+    if (!Object.keys(options).length) {
+      throw new Error ("options parameter is empty.");
+    }
+
+    if (!options.template) {
+      throw new Error ("options.template path is null.");
+    }
+
+    this.data = options.data;
+
+    if (typeof data == 'string') {
+      data = require(data);
+    }
+
+    if (typeof data == 'object') {
+      throw new Error("options.data must be a json array.")
+    }
+
+    this.template = options.template;
+
+  }
+
+  getData() {
+
+  }
+}
+
 var SqlGenerator = function() {};
 
-SqlGenerator.prototype.singleValueUpdate = function(options) {
-  if (!options.hasOwnProperty('table')) {
-    throw new Error ("Tabela é obrigatório");
-  }
-
-  if (!options.hasOwnProperty('field')) {
-    throw new Error ("Field é obrigatório");
-  }
-
-  if (!options.hasOwnProperty('dataType')) {
-    throw new Error ("DataType é obrigatório");
-  }
-
-  var newSelector, oldSelector;
-
-  switch(options.dataType) {
-    case 'string':
-    case 'json':
-      newSelector = "'@@new'";
-      oldSelector = "'@@old'";
-      break;
-
-    default:
-      newSelector = "@@new";
-      oldSelector = "@@old";
-  }
-
-  return "update " + options.table + " set " + options.field + " = " + newSelector + " WHERE " + options.field + " = " + oldSelector + "\n";
-};
 
 SqlGenerator.prototype.generate = function(options) {
-  if (!options.hasOwnProperty('template') || typeof options.template !== 'object') {
-    throw new Error ("Template é obrigatório");
-  }
-
-  if (!options.hasOwnProperty('resultFile')) {
-    throw new Error ("Arquivo de Saída não informado.");
-  }
 
   var template = options.template,
       sql = [];
@@ -90,14 +88,10 @@ SqlGenerator.prototype.generate = function(options) {
 
   data.forEach(function(jsonObject, index) {
     var replaceOptions = {
-      patterns: [
-        {
-          json: jsonObject
-        }
-      ]
+      patterns: [ { json: jsonObject } ]
     };
 
-    var replacer = new Replacer(replaceOptions);
+    var replacer = new PatternReplace(replaceOptions);
     var result = replacer.replace(templateBody);
 
     /**
@@ -123,4 +117,4 @@ SqlGenerator.prototype.generate = function(options) {
   writeFile(options.resultFile, sql.join(""));
 };
 
-module.exports = SqlGenerator;
+module.exports = Gen;
