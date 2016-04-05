@@ -1,6 +1,6 @@
 {
   "name": "gen",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Gen is a script generator based in templates and json data.",
   "main": "gen.js",
   "scripts": {
