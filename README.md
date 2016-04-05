@@ -1,4 +1,4 @@
-# Gen
+# Geni
 
 Generator based in templates and json data.
 
@@ -7,15 +7,15 @@ Generator based in templates and json data.
 Programatic:
 
 ```bash
-npm install gen --save
+npm install geni --save
 ```
 
 ## Example
 
 ```js
 
-const Gen = require('gen');
-var gen = new Gen();
+const Geni = require('geni');
+var geni = new Geni();
 
 // using files
 var options = {
@@ -28,7 +28,7 @@ var options = {
 };
 
 // generates ./results/result.txt
-gen.generate(options);
+geni.generate(options);
 
 // as objects
 var options = {
@@ -43,7 +43,7 @@ var options = {
 };
 
 // returns : "my data 123\nmy data 321"
-var result = gen.generate(options);
+var result = geni.generate(options);
 ```
 
 - template.txt
