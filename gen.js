@@ -1,33 +1,27 @@
 'use strict';
 
 const fs = require('fs');
-const PatternReplace = require('pattern-replace');
+const Replacer = require('pattern-replace');
 
-class Gen {
+module.exports = class Gen {
   generate(options) {
     var options = Gen.validate(options);
 
-    if (!options.data.length) {
-      return options.template.body;
-    }
-
-    var result = [];
-
-    options
-    .data
-    .forEach((object) => {
-      var replacer = new PatternReplace({
-        patterns: [ { json: object } ]
+    var result = options.data.map((json) => {
+      var replacer = new Replacer({
+        patterns: [ { json } ]
       });
 
-      result.push(replacer.replace(options.template.body));
+      return replacer.replace(options.template.body);
     });
 
+    var final = (!options.data.length) ? options.template.body : result.join("\n");
+
     if (!options.result) {
-      return result.join("\n");
+      return final;
     }
 
-    fs.writeFileSync(options.result, result.join("\n"), 'utf-8');
+    fs.writeFileSync(options.result, final, 'utf-8');
   }
 
   static validate(options) {
@@ -75,5 +69,3 @@ class Gen {
     return options;
   }
 }
-
-module.exports = Gen;

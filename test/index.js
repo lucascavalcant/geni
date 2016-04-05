@@ -128,6 +128,27 @@ describe("Gen module", () => {
     done();
   });
 
+  it("should write template body as result when data is empty and return is set.", (done) => {
+     var options = {
+      result: "./test/fixtures/result.txt",
+      template: {
+        isPath: false,
+        body: 'key: "value"'
+      },
+      data: []
+    };
+
+    instance.generate(options);
+    
+    expect(fs.accessSync.bind(fs, options.result, fs.F_OK | fs.R_OK)).not.to.throw(Error);
+
+    var result = fs.readFileSync(options.result).toString();
+
+    expect(result).to.equal(options.template.body);
+
+    done();
+  });
+
   it("should replace template variables with json data.", (done) => {
     var options = {
       template: {
@@ -241,7 +262,7 @@ describe("Gen module", () => {
     var expected = 'key: value1\nkey: value2\nkey: value3';
 
     expect(result).to.equal(expected);
-    
+
     done();
   });
 
