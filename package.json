@@ -1,7 +1,11 @@
 {
   "name": "geni",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "geni is a script generator based in templates and json data.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/armand1m/geni.git"
+  },
   "main": "geni.js",
   "scripts": {
     "test": "mocha --recursive",
