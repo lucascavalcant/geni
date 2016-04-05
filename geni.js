@@ -56,8 +56,8 @@ module.exports = class Geni {
     if ('isPath' in options.template) {
       if (!options.template.isPath) {
         return options;
-      } 
-    } 
+      }
+    }
 
     try {
       fs.accessSync(options.template.body, fs.F_OK | fs.R_OK);

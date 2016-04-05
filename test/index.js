@@ -40,7 +40,7 @@ describe("Geni module", () => {
 
     expect(instance.generate.bind(instance, options)).to.throw(Error);
 
-    done();    
+    done();
   });
 
   it("should throw error when template body is not set.", (done) => {
@@ -139,7 +139,7 @@ describe("Geni module", () => {
     };
 
     instance.generate(options);
-    
+
     expect(fs.accessSync.bind(fs, options.result, fs.F_OK | fs.R_OK)).not.to.throw(Error);
 
     var result = fs.readFileSync(options.result).toString();
@@ -255,7 +255,7 @@ describe("Geni module", () => {
     };
 
     instance.generate(options);
-    
+
     expect(fs.accessSync.bind(fs, options.result, fs.F_OK | fs.R_OK)).not.to.throw(Error);
 
     var result = fs.readFileSync(options.result).toString();
