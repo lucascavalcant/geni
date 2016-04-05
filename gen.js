@@ -3,16 +3,6 @@
 const fs = require('fs');
 const PatternReplace = require('pattern-replace');
 
-var writeFile = function(resultFilePath, content) {
-  fs.writeFile(resultFilePath, content, 'utf-8', function(err, data) {
-    if (err) {
-      console.log(err);
-    }
-
-    console.log("\nSql gerada com sucesso.\nArquivo: " + resultFilePath);
-  });
-};
-
 class Gen {
   generate(options) {
     var options = Gen.validate(options);
@@ -33,7 +23,11 @@ class Gen {
       result.push(replacer.replace(options.template.body));
     });
 
-    return result.join("\n");
+    if (!options.result) {
+      return result.join("\n");
+    }
+
+    fs.writeFileSync(options.result, result.join("\n"), 'utf-8');
   }
 
   static validate(options) {

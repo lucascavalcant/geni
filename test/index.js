@@ -1,10 +1,10 @@
+const fs = require('fs');
 const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
 
-const Gen = require('../gen');
-
 describe("Gen module", () => {
+  const Gen = require('../gen');
   var instance;
 
   it("should return a Gen instance.", (done) => {
@@ -166,5 +166,83 @@ describe("Gen module", () => {
     expect(result).to.equal(expected);
 
     done();
-  })
+  });
+
+  it("should be able to write using templates from files.", (done) => {
+    var options = {
+      template: {
+        isPath: true,
+        body: "./test/fixtures/template/template.txt"
+      },
+      data: [
+        { key: "value1" },
+        { key: "value2" },
+        { key: "value3" }
+      ]
+    };
+
+    var result = instance.generate(options);
+    var expected = 'key: value1\nkey: value2\nkey: value3';
+
+    expect(result).to.equal(expected);
+
+    done();
+  });
+
+  it("should be able to write using json from files.", (done) => {
+    var options = {
+      template: {
+        isPath: false,
+        body: 'key: @@key'
+      },
+      data: "./test/fixtures/data/data.json"
+    };
+
+    var result = instance.generate(options);
+    var expected = 'key: value1\nkey: value2\nkey: value3';
+
+    expect(result).to.equal(expected);
+
+    done();
+  });
+
+  it("should be able to write using both templates and json from files.", (done) => {
+    var options = {
+      template: {
+        isPath: true,
+        body: "./test/fixtures/template/template.txt"
+      },
+      data: "./test/fixtures/data/data.json"
+    };
+
+    var result = instance.generate(options);
+    var expected = 'key: value1\nkey: value2\nkey: value3';
+
+    expect(result).to.equal(expected);
+
+    done();
+  });
+
+  it("should be able to write to a result file.", (done) => {
+    var options = {
+      result: "./test/fixtures/result.txt",
+      template: {
+        isPath: true,
+        body: "./test/fixtures/template/template.txt"
+      },
+      data: "./test/fixtures/data/data.json"
+    };
+
+    instance.generate(options);
+    
+    expect(fs.accessSync.bind(fs, options.result, fs.F_OK | fs.R_OK)).not.to.throw(Error);
+
+    var result = fs.readFileSync(options.result).toString();
+    var expected = 'key: value1\nkey: value2\nkey: value3';
+
+    expect(result).to.equal(expected);
+    
+    done();
+  });
+
 });
