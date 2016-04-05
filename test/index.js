@@ -3,14 +3,14 @@ const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("Gen module", () => {
-  const Gen = require('../gen');
+describe("Geni module", () => {
+  const Geni = require('../geni');
   var instance;
 
-  it("should return a Gen instance.", (done) => {
-    instance = new Gen();
+  it("should return a Geni instance.", (done) => {
+    instance = new Geni();
 
-    expect(instance).to.be.an.instanceof(Gen);
+    expect(instance).to.be.an.instanceof(Geni);
 
     done();
   });

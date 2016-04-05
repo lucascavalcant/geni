@@ -1,8 +1,8 @@
 {
-  "name": "gen",
-  "version": "0.1.0",
-  "description": "Gen is a script generator based in templates and json data.",
-  "main": "gen.js",
+  "name": "geni",
+  "version": "0.1.1",
+  "description": "geni is a script generator based in templates and json data.",
+  "main": "geni.js",
   "scripts": {
     "test": "mocha --recursive",
     "testd": "mocha --recursive --watch"
