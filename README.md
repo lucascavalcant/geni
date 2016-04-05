@@ -1,135 +1,77 @@
-# sql-generator
+# Gen
 
-Gerador de SQL's baseado em Template e Models.
+Generator based in templates and json data.
 
-## Instalação
+## Usage
 
-Tenha certeza que tem node.js instalado na maquina [node.js](http://nodejs.org/)
+Programatic:
 
-Command Line:
-```shell
-npm install pattern-replace -g
+```bash
+npm install gen --save
 ```
 
-Uso em Aplicações:
-```shell
-npm install pattern-replace
-```
+## Example
 
-## Referencia
-```javascript
-// gen_result_file.js
+```js
 
-var SqlGenerator = require('sql-generator');
+const Gen = require('gen');
+var gen = new Gen();
 
-SqlGenerator({
-  resultFile: "./results/result_file.sql",
+// using files
+var options = {
+  result: "./results/result.txt",
   template: {
-    header: './templates/template_header.sql', // [opcional]
-    body: './templates/template_corpo.sql'
+    isPath: true,
+    body: "./template/template.txt"
   },
-  data: './data/data.json' // [opcional]
-});
+  data: "./data/data.json"
+};
+
+// generates ./results/result.txt
+gen.generate(options);
+
+// as objects
+var options = {
+  template: {
+    isPath: false,
+    body: "my data @@key"
+  },
+  data: [
+  	{ key: "123" },
+  	{ key: "321" },
+  ]
+};
+
+// returns : "my data 123\nmy data 321"
+var result = gen.generate(options);
 ```
 
-```sql
-// ./templates/template_corpo.sql
-insert into cadastro.cliente_motorista (
-  motorista
-  , cpf
-  , senha
-  , ativo
-  , cliente
-  , usuario
-  , evento
-  , limite
-  , limite_disponivel
-  )
-  select
-  '@@nome'
-  , '@@cpf'
-  , '@@senha'
-  , '@@ativo'
-  , codigo
-  , usuario
-  , current_timestamp
-  , 0
-  , 0
-  from clientes
-  where cnpj = '@@cli_ds_cnpj'
+- template.txt
+
+```txt
+key: @@key
 ```
+
+- data.json
 
 ```json
 [
-  {
-    "nome": "João",
-    "cpf": "123.123.123-23",
-    "senha": "123456",
-    "ativo": "S",
-    "cli_ds_cnpj": "00.000.000/0001-00"
-  },
-  {
-    "nome": "Breno",
-    "cpf": "123.123.123-23",
-    "senha": "123456",
-    "ativo": "S",
-    "cli_ds_cnpj": "11.111.111/0001-00"
-  }
+  { "key": "value1" },
+  { "key": "value2" },
+  { "key": "value3" }
 ]
 ```
 
-```sql
+then run:
 
-  insert into cadastro.cliente_motorista (
-    clm_ds_cliente_motorista
-    , clm_ds_cpf
-    , clm_ds_senha
-    , clm_fl_ativo
-    , clm_cd_cliente
-    , clm_cd_usuario
-    , clm_ts_evento
-    , clm_vl_limite
-    , clm_vl_limite_disponivel
-  )
-  select
-    'João'
-    , '123.123.123-23'
-    , '123456'
-    , 'S'
-    , codigo
-    , usuario
-    , current_timestamp
-    , 0
-    , 0
-  from clientes
-  where cnpj = '00.000.000/0001-00'
-
-  insert into cadastro.cliente_motorista (
-    clm_ds_cliente_motorista
-    , clm_ds_cpf
-    , clm_ds_senha
-    , clm_fl_ativo
-    , clm_cd_cliente
-    , clm_cd_usuario
-    , clm_ts_evento
-    , clm_vl_limite
-    , clm_vl_limite_disponivel
-  )
-  select
-    'Breno'
-    , '123.123.123-23'
-    , '123456'
-    , 'S'
-    , codigo
-    , usuario
-    , current_timestamp
-    , 0
-    , 0
-  from clientes
-  where cnpj = '11.111.111/0001-00'
+```bash
+node my-generator.js
 ```
 
-### Parametro
+- result.txt
 
-Sql generator é uma função que pede como paramentro um objeto literal em Javascript.
-Os únicos campos obrigatórios são "resultFile" e "template.body".
+```txt
+key: value1
+key: value2
+key: value3
+```

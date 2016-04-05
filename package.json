@@ -1,15 +1,19 @@
 {
-  "name": "sql-generator",
-  "version": "0.0.0",
-  "description": "Você passa um template de uma sql, um json com dados, e compila.",
-  "main": "sql-generator.js",
+  "name": "gen",
+  "version": "0.1.0",
+  "description": "Gen is a script generator based in templates and json data.",
+  "main": "gen.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive",
+    "testd": "mocha --recursive --watch"
   },
   "author": "Armando Magalhães",
   "license": "ISC",
   "dependencies": {
-    "pattern-replace": "^0.1.2",
-    "sql-parser": "^0.5.0"
+    "pattern-replace": "^0.1.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   }
 }
