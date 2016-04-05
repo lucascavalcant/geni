@@ -2,6 +2,8 @@
 
 Generator based in templates and json data.
 
+[Geni Sample](http://github.com/armand1m/geni-sample)
+
 ## Usage
 
 Programatic:
