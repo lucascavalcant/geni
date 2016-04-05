@@ -1,7 +1,7 @@
 'use strict';
 
-var fs = require('fs');
-var PatternReplace = require('pattern-replace');
+const fs = require('fs');
+const PatternReplace = require('pattern-replace');
 
 var writeFile = function(resultFilePath, content) {
   fs.writeFile(resultFilePath, content, 'utf-8', function(err, data) {
@@ -15,6 +15,28 @@ var writeFile = function(resultFilePath, content) {
 
 class Gen {
   generate(options) {
+    var options = Gen.validate(options);
+
+    if (!options.data.length) {
+      return options.template.body;
+    }
+
+    var result = [];
+
+    options
+    .data
+    .forEach((object) => {
+      var replacer = new PatternReplace({
+        patterns: [ { json: object } ]
+      });
+
+      result.push(replacer.replace(options.template.body));
+    });
+
+    return result.join("\n");
+  }
+
+  static validate(options) {
     if (!options) {
       throw new Error ("options parameter is null.");
     }
@@ -23,94 +45,41 @@ class Gen {
       throw new Error ("options parameter is empty.");
     }
 
-    if (!options.template) {
-      throw new Error ("options.template path is null.");
+    if (!'template' in options) {
+      throw new Error ("options.template cant be null.");
     }
 
-    var data = options.data;
-
-    if (typeof data == 'string') {
-      data = require(data);
+    if (typeof options.template != 'object') {
+      throw new Error("options.template must be a object.")
     }
 
-    if (typeof data == 'object') {
-      throw new Error("options.data must be a json array.")
+    if (!options.template.body) {
+      throw new Error("options.template.body cant be null.");
     }
 
-    this.template = options.template;
+    if (typeof options.data == 'string') {
+      options.data = require(options.data);
+    }
 
+    if (!Array.isArray(options.data)) {
+      throw new Error("options.data must be a array.")
+    }
+
+    if ('isPath' in options.template) {
+      if (!options.template.isPath) {
+        return options;
+      } 
+    } 
+
+    try {
+      fs.accessSync(options.template.body, fs.F_OK | fs.R_OK);
+      options.template.body = fs.readFileSync(options.template.body).toString();
+    } catch (e) {
+      throw new Error("options.template.body is not a readable file.")
+    }
+
+    return options;
   }
 }
-
-var SqlGenerator = function() {};
-
-
-SqlGenerator.prototype.generate = function(options) {
-
-  var template = options.template,
-      sql = [];
-
-  if (template.hasOwnProperty('header')) {
-    var templateHeader = fs.readFileSync(template.header).toString();
-    sql.push(templateHeader);
-  }
-
-  var templateBody;
-  try {
-    templateBody = fs.readFileSync(template.body).toString();
-  } catch(e) {
-    templateBody = template.body;
-  }
-
-  /**
-   * se não tiver fonte de dados, concatenar body com header e retornar ok.
-   */
-  if (!options.hasOwnProperty('data')) {
-    sql.push(templateBody);
-
-    if(template.hasOwnProperty('footer')) {
-      var templateFooter = fs.readFileSync(template.footer).toString();
-      sql.push(templateFooter);
-    }
-
-    var resultString = sql.join("\n");
-    writeFile(options.resultFile, resultString);
-
-    return;
-  }
-
-  var dataJson = fs.readFileSync(options.data).toString();
-  var data = JSON.parse(dataJson);
-
-  data.forEach(function(jsonObject, index) {
-    var replaceOptions = {
-      patterns: [ { json: jsonObject } ]
-    };
-
-    var replacer = new PatternReplace(replaceOptions);
-    var result = replacer.replace(templateBody);
-
-    /**
-     * slice last comma
-     */
-    if (index == data.length - 1) {
-      var comma = result.lastIndexOf(",");
-
-      if (comma !== -1) {
-        console.log("cortando ultima virgula de " + template.body + "..");
-        result = result.slice(0, comma);
-      }
-    }
-
-    sql.push(result);
-  });
-
-  if(template.hasOwnProperty('footer')) {
-    var templateFooter = fs.readFileSync(template.footer).toString();
-    sql.push(templateFooter);
-  }
-
-  writeFile(options.resultFile, sql.join(""));
-};
 
 module.exports = Gen;

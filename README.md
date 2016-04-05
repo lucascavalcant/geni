@@ -1,39 +1,35 @@
-# sql-generator
+# Gen
 
-Gerador de SQL's baseado em Template e Models.
+Generator based in templates and json data.
 
-## Instalação
+## Usage
 
-Tenha certeza que tem node.js instalado na maquina [node.js](http://nodejs.org/)
-
-Command Line:
-```shell
-npm install pattern-replace -g
+Programatic:
+```bash
+npm install gen --save
 ```
 
-Uso em Aplicações:
-```shell
-npm install pattern-replace
-```
+## Example
 
-## Referencia
-```javascript
+```js
 // gen_result_file.js
 
-var SqlGenerator = require('sql-generator');
+var Gen = require('gen');
 
-SqlGenerator({
-  resultFile: "./results/result_file.sql",
+Gen({
+  result: "./results/result_file.sql", 
   template: {
-    header: './templates/template_header.sql', // [opcional]
-    body: './templates/template_corpo.sql'
+    header: './templates/template_header.sql', // optional header
+    body: './templates/template_corpo.sql' // must have
   },
-  data: './data/data.json' // [opcional]
+  data: './data/data.json' // optional
 });
 ```
 
 ```sql
-// ./templates/template_corpo.sql
+
+-- ./templates/template_corpo.sql
+
 insert into cadastro.cliente_motorista (
   motorista
   , cpf
@@ -128,8 +124,3 @@ insert into cadastro.cliente_motorista (
   from clientes
   where cnpj = '11.111.111/0001-00'
 ```
-
-### Parametro
-
-Sql generator é uma função que pede como paramentro um objeto literal em Javascript.
-Os únicos campos obrigatórios são "resultFile" e "template.body".
