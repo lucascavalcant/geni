@@ -1,5 +1,7 @@
 # Geni
 
+[ ![Codeship Status for armand1m/geni](https://codeship.com/projects/24b63820-d8c9-0133-1290-5af0912547e0/status?branch=master)](https://codeship.com/projects/143334)
+
 Generator based in templates and json data.
 
 [Geni Sample](http://github.com/armand1m/geni-sample)
@@ -39,8 +41,8 @@ var options = {
     body: "my data @@key"
   },
   data: [
-  	{ key: "123" },
-  	{ key: "321" },
+    { key: "123" },
+    { key: "321" },
   ]
 };
 
