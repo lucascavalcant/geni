@@ -3,9 +3,9 @@
 const fs = require('fs');
 const Replacer = require('pattern-replace');
 
-module.exports = class Gen {
+module.exports = class Geni {
   generate(options) {
-    var options = Gen.validate(options);
+    var options = Geni.validate(options);
 
     var result = options.data.map((json) => {
       var replacer = new Replacer({
